@@ -1,0 +1,26 @@
+﻿@using MyShop.Web.Settings
+
+@if(TempData[ToastrKeys.Create] != null)
+{
+    <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <script type="text/javascript">
+        toastr["success"]("@TempData[ToastrKeys.Create]");
+    </script>
+
+    // clear tempdata
+   // TempData[ToastrKeys.Create] = null;
+}
+
+ else if(TempData[ToastrKeys.Update] is not null)
+{
+    <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <script type="text/javascript">
+        toastr["info"]("@TempData[ToastrKeys.Update]");
+        </script>
+    // clear tempdata
+    //TempData[ToastrKeys.Update] = null;
+}

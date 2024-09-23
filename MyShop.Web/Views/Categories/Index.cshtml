@@ -1,0 +1,57 @@
+﻿@{
+    Layout = "_Dashboard";
+    ViewBag.CardTitle = "Categories List";
+    ViewBag.Title = "Category Management";
+}
+@model IEnumerable<Category>
+
+
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <a asp-action="Create" class="btn btn-info">
+        <i class="fas fa-plus"></i> Create New Category
+    </a>
+</div>
+
+<table class="table table-striped table-hover mt-4">
+    <thead class="table-dark">
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Description</th>
+            <th scope="col">Created Date</th>
+            <th scope="col" class="text-center">Action</th> <!-- Center aligned action buttons -->
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var cat in Model)
+        {
+            <tr>
+                <td>@cat.Name</td>
+                <td>@cat.Description</td>
+                <td>@cat.CreatedTime.ToString("yyyy-MM-dd")</td> <!-- Format date as required -->
+                <td class="text-center">
+                    <!-- Center the action buttons -->
+                    <a href="/Categories/Edit/@cat.Id" class="btn btn-success btn-sm me-2">
+                        <!-- Add margin-right (me-2) for spacing -->
+                        <i class="fas fa-edit"></i> Edit
+                    </a>
+
+
+                    <a  onclick="DeleteCat(event)" data-cat-id="@cat.Id" class="btn btn-danger btn-sm " style="color:white">
+                        <!-- Add margin-right (me-2) for spacing -->
+                        <i class="fas fa-trash"></i> Delete
+                    </a>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+@section Scripts {
+    <script src="~/js/deletecategory.js" asp-append-version="true"></script>
+
+}
+
