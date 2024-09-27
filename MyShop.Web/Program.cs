@@ -1,6 +1,11 @@
 using Microsoft.EntityFrameworkCore;
-using MyShop.Web.Data;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using MyShop.DAL.Data;
+using MyShop.DAL.Repositories;
+using MyShop.Entities.IRepositories;
+using MyShop.Services.Implementations;
+using MyShop.Services.Interfaces;
+using MyShop.Web.Services.Implementations;
+using MyShop.Web.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +20,13 @@ builder.Services.AddControllersWithViews();
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection" ?? throw new InvalidOperationException("No Connection String was found"));
 builder.Services.AddDbContext<AppDbContext>(options =>options.UseSqlServer(connectionString));
 
+// repository pattern with unit of work
+builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
+
+// dependency injection
+builder.Services.AddTransient<ICategoryService, CategoryService>();
+builder.Services.AddTransient<IProductService, ProductService>();
+builder.Services.AddTransient<IFileService, FileService>();
 
 
 #endregion
@@ -34,9 +46,12 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-app.UseRouting();
+app.UseRouting();  // First, define the routing
+app.UseAuthorization();  // Authorization goes after routing
 
-app.UseAuthorization();
+app.MapControllerRoute(
+    name: "areas",
+    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
 app.MapControllerRoute(
     name: "default",

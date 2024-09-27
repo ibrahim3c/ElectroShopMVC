@@ -1,6 +1,6 @@
-﻿function DeleteCat(e) {
+﻿function DeleteProduct(e) {
     var btn = e.currentTarget;  // Get the button that was clicked
-    var id = btn.getAttribute('data-cat-id');
+    var id = btn.getAttribute('data-product-id');
     const swalWithBootstrapButtons = Swal.mixin({
         customClass: {
             confirmButton: "btn btn-success mx-2",
@@ -19,11 +19,11 @@
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: '/Admin/Categories/DeleteCategory/' + id,  // Added + for concatenation
+                url: '/Admin/Products/Delete/' + id,  // Added + for concatenation
                 success: function () {
                     swalWithBootstrapButtons.fire({
                         title: "Deleted!",
-                        text: "The Category has been deleted.",
+                        text: "The Product has been deleted.",
                         icon: "success"
                     });
                     $(btn).parents('tr').fadeOut();  // Wrapped btn in jQuery

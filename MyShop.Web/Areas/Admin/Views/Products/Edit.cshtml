@@ -1,0 +1,86 @@
+﻿@{
+    Layout = "_Dashboard";
+    ViewBag.CardTitle = "Edit Product";
+    ViewBag.Title = "Product Management";
+}
+
+@model EditProductVM
+
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label">Product Name</label>
+        <input type="text" class="form-control" asp-for="Name" placeholder="Enter Product Name" required>
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Price" class="form-label">Price</label>
+        <input type="number"  class="form-control" asp-for="Price" required>
+        <span asp-validation-for="Price" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label">Description</label>
+        <textarea class="form-control" asp-for="Description" rows="3" placeholder="Enter Description" required></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+
+@*     <div class="mb-3">
+        <label asp-for="ProductImage" class="form-label">Product Image</label>
+        <input type="file" class="form-control" asp-for="ProductImage" required>
+        <span asp-validation-for="ProductImage" class="text-danger"></span>
+    </div> *@
+
+    <div class="mb-3">
+        <label asp-for="ProductImage" class="form-label">Product Image</label>
+        <div class="input-group">
+            <label class="input-group-text" for="ProductImageInput">Upload</label>
+
+            <!-- Hide the original input -->
+            <input type="file" class="form-control d-none" id="ProductImageInput" asp-for="ProductImage" aria-label="Product Image" required>
+
+
+
+            <!-- Display selected file name -->
+            <label class="form-control" id="file-name-label">No file chosen</label>
+        </div>
+        <span asp-validation-for="ProductImage" class="text-danger"></span>
+    </div>
+
+
+    <div class="mb-3">
+        <label asp-for="CatID" class="form-label"></label>
+        <select asp-for="CatID" asp-items="Model.Categories">
+        <option disabled value="" selected>--Select Category--</option>
+      </select>
+        
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+
+
+    <div class="d-flex justify-content-between mt-4">
+        <button type="submit" class="btn btn-success">
+            <i class="bi bi-check-lg"></i> Edit
+        </button>
+        <a asp-action="Index" class="btn btn-warning">
+            <i class="bi bi-arrow-left"></i> Back to list
+        </a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+
+
+        // Update file name display when a file is selected
+        document.getElementById('ProductImageInput').addEventListener('change', function () {
+            var fileName = this.files[0]?.name || "No file chosen";
+            document.getElementById('file-name-label').textContent = fileName;
+        });
+    </script>
+}
