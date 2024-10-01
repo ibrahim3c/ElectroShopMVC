@@ -131,5 +131,31 @@ namespace MyShop.Web.Services.Implementations
             await fileService.DeleteFileAsync(oldImage);
             return true;
         }
+        public  IEnumerable<ProductForIndexVM>GetAllProductForIndex()
+        {
+            return  unitOfWork.Products.GetAll().Select(p => new ProductForIndexVM
+            {
+                Id = p.Id,
+                Name = p.Name,
+                ImgSrc = p.ImgSrc,
+                Price = p.Price
+            }).ToList();
+        }
+        public ProductForDetails GetProductDetails(int id)
+        {
+            // don't forget to include category
+            var product=unitOfWork.Products.Find(p => p.Id == id, new string[] { "Category" });
+            return new ProductForDetails
+            {
+                Id = product.Id,
+                Description = product.Description,
+                ImgSrc = product.ImgSrc,
+                Price = product.Price,
+                Name = product.Name,
+                CategoryName = product.Category.Name
+            };
+
+        }
+
     }
 }

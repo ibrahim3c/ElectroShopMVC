@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MyShop.Entities.IRepositories;
 using MyShop.Entities.Models;
+using MyShop.Web.Constants;
 using MyShop.Web.Services.Implementations;
 using MyShop.Web.Services.Interfaces;
 using MyShop.Web.Settings;
@@ -10,6 +12,8 @@ using MyShop.Web.ViewModels;
 namespace MyShop.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = Roles.AdminRole)]
+
     public class ProductsController : Controller
     {
         private readonly IUnitOfWork unitOfWork;

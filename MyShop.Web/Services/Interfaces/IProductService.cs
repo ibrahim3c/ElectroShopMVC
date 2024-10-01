@@ -14,7 +14,11 @@ namespace MyShop.Web.Services.Interfaces
         public  Task<Product> GetProductById(int id);
         public  Task<EditProductVM> GetDataForEdit(Product product);
         public  Task<bool> DeleteProduct(Product product);
-     
+        public IEnumerable<ProductForIndexVM> GetAllProductForIndex();
+        public ProductForDetails GetProductDetails(int id);
+
+
+
 
     }
 }

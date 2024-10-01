@@ -1,15 +1,19 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using MyShop.DAL.Data;
 using MyShop.Entities.IRepositories;
 using MyShop.Entities.Models;
+using MyShop.Web.Constants;
 using MyShop.Web.Settings;
 using System;
 namespace MyShop.Web.Areas.Admin.Controllers
 {
 
     [Area("Admin")]
+
+    [Authorize(Roles=Roles.AdminRole)]
     public class CategoriesController : Controller
     {
         private readonly IUnitOfWork unitOfWork;

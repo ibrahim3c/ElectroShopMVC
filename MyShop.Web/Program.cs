@@ -6,6 +6,8 @@ using MyShop.Services.Implementations;
 using MyShop.Services.Interfaces;
 using MyShop.Web.Services.Implementations;
 using MyShop.Web.Services.Interfaces;
+using Microsoft.AspNetCore.Identity;
+using MyShop.Entities.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +21,18 @@ builder.Services.AddControllersWithViews();
 // dbcontext
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection" ?? throw new InvalidOperationException("No Connection String was found"));
 builder.Services.AddDbContext<AppDbContext>(options =>options.UseSqlServer(connectionString));
+
+
+// Identity
+//builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<AppDbContext>();
+builder.Services.AddIdentity<AppUser, IdentityRole>(options => {
+    options.SignIn.RequireConfirmedAccount = false;
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromHours(3);
+    })
+              .AddEntityFrameworkStores<AppDbContext>()
+              .AddDefaultUI()
+              .AddDefaultTokenProviders();
+
 
 // repository pattern with unit of work
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
@@ -48,13 +62,18 @@ app.UseStaticFiles();
 
 app.UseRouting();  // First, define the routing
 app.UseAuthorization();  // Authorization goes after routing
+app.MapRazorPages(); // to use Razor Pages
+
+//app.MapControllerRoute(
+//    name: "areas",
+//    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+//app.MapControllerRoute(
+//    name: "default",
+//    pattern: "{controller=Home}/{action=Index}/{id?}");
+
 
 app.MapControllerRoute(
     name: "areas",
-    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
-
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
-
+    pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
 app.Run();
