@@ -10,6 +10,7 @@ namespace MyShop.DAL.Repositories
 
         public IBaseRepository<Category> Categories { get; private set; }
         public IBaseRepository<Product> Products { get; private set; }
+        public IShoppingCartRepository ShoppingCarts { get; private set; }
         
 
         public UnitOfWork(AppDbContext context)
@@ -18,6 +19,7 @@ namespace MyShop.DAL.Repositories
 
             Categories = new BaseRepository<Category>(_context);
             Products = new BaseRepository<Product>(_context);
+            ShoppingCarts= new ShoppingCartRepository(_context);
         }
 
         public int Complete()

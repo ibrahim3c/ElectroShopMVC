@@ -1,19 +1,58 @@
 ﻿@page
+@using MyShop.Web.Settings
 @model IndexModel
 @{
     ViewData["Title"] = "Profile";
     ViewData["ActivePage"] = ManageNavPages.Index;
 }
+<style>
+    *{
+        margin:0;
+        padding:0;
+        box-sizing:border-box;
+    }
+    #profilePicture{
+        height:350px;
+        width:350px;
+        border-radius:10px
+    }
+
+ 
+</style>
 
 <h3>@ViewData["Title"]</h3>
 <partial name="_StatusMessage" for="StatusMessage" />
+<form id="profile-form" method="post" enctype="multipart/form-data">
 <div class="row">
     <div class="col-md-6">
-        <form id="profile-form" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+
+            <div class="form-floating mb-3">
+                <input asp-for="Input.FirstName" class="form-control" placeholder="Please choose your First Name."  />
+                <label asp-for="Input.FirstName" class="form-label"></label>
+                <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+
+            </div>
+
+            <div class="form-floating mb-3">
+                <input asp-for="Input.LastName" class="form-control" placeholder="Please choose your Last Name." />
+                <label asp-for="Input.LastName" class="form-label"></label>
+                <span asp-validation-for="Input.LastName" class="text-danger"></span>
+
+            </div>
+
+            <div class="form-floating mb-3">
+                <input asp-for="Input.Address" class="form-control" placeholder="Please choose your Address." />
+                <label asp-for="Input.Address" class="form-label"></label>
+                <span asp-validation-for="Input.Address" class="text-danger"></span>
+
+            </div>
+
             <div class="form-floating mb-3">
                 <input asp-for="Username" class="form-control" placeholder="Please choose your username." disabled />
                 <label asp-for="Username" class="form-label"></label>
+                <span asp-validation-for="Username" class="text-danger"></span>
+
             </div>
             <div class="form-floating mb-3">
                 <input asp-for="Input.PhoneNumber" class="form-control" placeholder="Please enter your phone number."/>
@@ -21,10 +60,45 @@
                 <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
             </div>
             <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
-        </form>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group  ">
+@*                 <label class="w-100" asp-for="Input.ProfilePicture"> Profile Picture</label>
+ *@                @if (Model.Input.ProfilePictureURL != null)
+                {
+                    <img id="profilePicture" alt="Profile" src="@Model.Input.ProfilePictureURL" />
+                }
+                else
+                {
+                    <img id="profilePicture" alt="Profile" src="@FileSettings.ImagePath/avatar5.png" />
+                }
+                <div class="mt-2">
+                    <input type="file" asp-for="Input.ProfilePicture" accept="image/*" class="form-control" onchange="changeImage(this)" />
+                    <span asp-validation-for="Input.ProfilePicture" class="text-danger"></span>
+                </div>
+
+            </div>
     </div>
 </div>
+</form>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        function changeImage(input) {
+            var img = document.getElementById("profilePicture");
+
+            // Ensure a file is selected
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                // Event listener for when the file is loaded
+                reader.onload = function (e) {
+                    img.src = e.target.result; // Set the image src to the file content
+                };
+
+                reader.readAsDataURL(input.files[0]); // Read the selected file
+            }
+        }
+    </script>
 }

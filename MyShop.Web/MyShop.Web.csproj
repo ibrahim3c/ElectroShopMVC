@@ -36,4 +36,11 @@
     <Folder Include="Settings\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="wwwroot\assets\images\games\avatar5.png">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

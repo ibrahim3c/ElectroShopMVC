@@ -14,8 +14,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-
-
 #region myConfig
 
 // dbcontext
@@ -41,6 +39,7 @@ builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();
 builder.Services.AddTransient<IProductService, ProductService>();
 builder.Services.AddTransient<IFileService, FileService>();
+builder.Services.AddTransient<ICartService, CartService>();
 
 
 #endregion

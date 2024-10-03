@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MyShop.Entities.Models;
+using MyShop.Services.Interfaces;
+using MyShop.Web.Settings;
 
 namespace MyShop.Web.Areas.Identity.Pages.Account.Manage
 {
@@ -17,13 +19,15 @@ namespace MyShop.Web.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly IFileService fileService;
 
         public IndexModel(
             UserManager<AppUser> userManager,
-            SignInManager<AppUser> signInManager)
+            SignInManager<AppUser> signInManager,IFileService fileService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            this.fileService = fileService;
         }
 
         /// <summary>
@@ -59,18 +63,40 @@ namespace MyShop.Web.Areas.Identity.Pages.Account.Manage
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
+
+            // my custom fields
+            [Required, MaxLength(100)]
+            public string FirstName { get; set; }
+
+            [Required, MaxLength(100)]
+            public string LastName { get; set; }
+
+            public string? Address { get; set; } = default!;
+            public IFormFile? ProfilePicture { get; set; }
+            public string? ProfilePictureURL { get; set; }
         }
 
         private async Task LoadAsync(AppUser user)
         {
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+            var firstName =  user.FirstName;
+            var lastName =  user.LastName;
+            var address =  user.Address;
+            var profilePictureURL = user.ProfilePicture;
+            var profilePicture = await fileService.GetFileAsIFormFileAsync(profilePictureURL);
 
             Username = userName;
 
             Input = new InputModel
             {
                 PhoneNumber = phoneNumber
+                ,
+                FirstName = firstName,
+                LastName = lastName,
+                Address = address,
+                ProfilePictureURL = profilePictureURL,
+                ProfilePicture = profilePicture
             };
         }
 
@@ -110,6 +136,53 @@ namespace MyShop.Web.Areas.Identity.Pages.Account.Manage
                     return RedirectToPage();
                 }
             }
+
+            var firstName = user.FirstName;
+            if(firstName != Input.FirstName)
+            {
+                user.FirstName = Input.FirstName;
+                await _userManager.UpdateAsync(user);
+            }
+
+
+            var lastName = user.LastName;
+            if (lastName != Input.LastName)
+            {
+                user.LastName = Input.LastName;
+                await _userManager.UpdateAsync(user);
+            }
+
+            var address = user.Address;
+            if (address != Input.Address)
+            {
+                user.Address = Input.Address;
+                await _userManager.UpdateAsync(user);
+            }
+
+           // add image
+           if(Input.ProfilePicture!=null && Input.ProfilePicture != fileService.GetFileAsIFormFileAsync( user.ProfilePicture))
+            {
+                var fileExtension = Path.GetExtension(Input.ProfilePicture.FileName).ToLowerInvariant();
+                var FileSize = Input.ProfilePicture.Length;
+
+                if (!FileSettings.AllowedExtensions.Contains(fileExtension)) ModelState.AddModelError("ProfilePicture", "you should put valid extension");
+                if (FileSettings.MaxFileSizeInBytes < FileSize) ModelState.AddModelError("ProfilePicture", "you should put valid size");
+
+                if (ModelState.IsValid)
+                {
+                var image = await fileService.UploadFileAsync(Input.ProfilePicture, FileSettings.ImagePath);
+                if (string.IsNullOrEmpty(image)) ModelState.AddModelError("ProfilePicture", "The profile Picture is Required");
+                    else
+                    {
+
+                    user.ProfilePicture = image;    
+                    }
+                }
+            
+            }
+
+           
+            await _userManager.UpdateAsync(user);
 
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";

@@ -147,17 +147,7 @@ namespace MyShop.Web.Areas.Identity.Pages.Account
                 user.LastName = Input.LastName;
                 user.Address= Input.Address;
 
-                // add image
-
-                //var fileExtension = Path.GetExtension(Input.ProfilePicture.FileName).ToLowerInvariant();
-                //var FileSize = Input.ProfilePicture.Length;
-
-                //if (!FileSettings.AllowedExtensions.Contains(fileExtension)) ModelState.AddModelError("ProfilePicture","you should put valid extension");
-                //if (FileSettings.MaxFileSizeInBytes < FileSize) ModelState.AddModelError("ProfilePicture", "you should put valid size");
-
-                //var image = await fileService.UploadFileAsync(Input.ProfilePicture, FileSettings.ImagePath);
-                //if (string.IsNullOrEmpty(image)) ModelState.AddModelError("ProfilePicture", "The profile Picture is Required");
-                //user.ProfilePicture = image;
+              
 
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
@@ -187,8 +177,17 @@ namespace MyShop.Web.Areas.Identity.Pages.Account
                     }
                     else
                     {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
+
+                        // Register OR Crerate new User
+                        if (User.IsInRole(Roles.AdminRole)) {
+                            return RedirectToAction("Index", "Users", new { area = "Admin" });
+                        }
+                        else
+                        {
+                          await _signInManager.SignInAsync(user, isPersistent: false);
+                          return LocalRedirect(returnUrl);
+                        }
+                      
                     }
                 }
                 foreach (var error in result.Errors)

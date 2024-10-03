@@ -62,5 +62,34 @@ namespace MyShop.Services.Implementations
             }
         }
 
+        // New function to retrieve image as an IFormFile
+        public async Task<IFormFile> GetFileAsIFormFileAsync(string imageSrc)
+        {
+            try
+            {
+                var fullPath = webHostEnvironment.WebRootPath + "/" + imageSrc;
+                if (!File.Exists(fullPath))
+                {
+                    return null; // Return null if the file doesn't exist
+                }
+
+                // Read the file into a byte array or stream
+                var memoryStream = new MemoryStream(await File.ReadAllBytesAsync(fullPath));
+
+                // Create an IFormFile from the MemoryStream
+                IFormFile formFile = new FormFile(memoryStream, 0, memoryStream.Length, "profilePicture", Path.GetFileName(fullPath))
+                {
+                    Headers = new HeaderDictionary(),
+                    ContentType = "image/jpeg" // Set content type (change based on file type)
+                };
+
+                return formFile;
+            }
+            catch
+            {
+                return null; // Return null in case of an error
+            }
+        }
+
     }
 }

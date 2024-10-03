@@ -1,7 +1,9 @@
 ﻿@model ProductForDetails
+<form method="post">
 <section class="py-5">
             <div class="container px-4 px-lg-5 my-5">
                 <div class="row gx-4 gx-lg-5 align-items-center">
+                <input type="hidden" asp-for="Id"  />
                     <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0" src="@Model.ImgSrc" alt="..."></div>
                     <div class="col-md-6">
                         <div class="small mb-1">SKU: BST-498</div>
@@ -12,8 +14,8 @@
                         </div>
                         <p class="lead"> @Model.Description</p>
                         <div class="d-flex">
-                            <input class="form-control text-center me-3" id="inputQuantity" type="num" value="1" style="max-width: 3rem">
-                            <button class="btn btn-outline-dark flex-shrink-0" type="button">
+                            <input asp-for="Count" class="form-control text-center me-3" id="inputQuantity" type="num" value="1" style="max-width: 3rem">
+                            <button type="submit" class="btn btn-outline-dark flex-shrink-0" type="button">
                                 <i class="bi-cart-fill me-1"></i>
                                 Add to cart
                             </button>
@@ -22,3 +24,4 @@
                 </div>
             </div>
  </section>
+</form>
