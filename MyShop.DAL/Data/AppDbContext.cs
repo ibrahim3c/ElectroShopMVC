@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using MyShop.Entities.Models;
+using MyShop.Web;
 
 namespace MyShop.DAL.Data
 {
@@ -14,6 +15,8 @@ namespace MyShop.DAL.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<ShoppingCart> shoppingCarts { get; set; }
+        public DbSet<OrderHeader>  orderHeaders { get; set; }
+        public DbSet<OrderDetails> orderDetails { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

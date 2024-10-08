@@ -8,6 +8,8 @@ using MyShop.Web.Services.Implementations;
 using MyShop.Web.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using MyShop.Entities.Models;
+using MyShop.Web.Constants;
+using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,11 +39,13 @@ builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 
 // dependency injection
 builder.Services.AddTransient<ICategoryService, CategoryService>();
-builder.Services.AddTransient<IProductService, ProductService>();
-builder.Services.AddTransient<IFileService, FileService>();
+builder.Services.AddTransient<IProductService, MyShop.Web.Services.Implementations.ProductService>();
+builder.Services.AddTransient<IFileService, MyShop.Services.Implementations.FileService>();
 builder.Services.AddTransient<ICartService, CartService>();
 
 
+// Stripe
+builder.Services.Configure<StripeData>(builder.Configuration.GetSection("Stripe"));
 #endregion
 
 
@@ -60,6 +64,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();  // First, define the routing
+
+StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey").Get<string>();
 app.UseAuthorization();  // Authorization goes after routing
 app.MapRazorPages(); // to use Razor Pages
 

@@ -20,6 +20,47 @@ namespace MyShop.Web.Services.Implementations
             this.fileService = fileService;
         }
 
+        public IEnumerable<ShoppingCart>GetAllShoppingCarts(string userID)
+        {
+            return  unitOfWork.ShoppingCarts.FindAll(s => s.UserID == userID, new string[] { "Product" });
+           
+        }
+
+        public bool RemoveShoppingCarts(IEnumerable<ShoppingCart> shoppingCarts)
+        {
+            unitOfWork.ShoppingCarts.DeleteRange(shoppingCarts);
+           var result= unitOfWork.Complete();
+            return result > 0;
+        }
+
+        public bool RemoveShoppingCartsOfOrderHeader( int orderHeaderID)
+        {
+            var orderHeader = GetOrderHeader(orderHeaderID);
+            var shoppingCarts = unitOfWork.ShoppingCarts.FindAll(u => u.UserID == orderHeader.UserId);
+
+           return RemoveShoppingCarts(shoppingCarts);
+
+        }
+
+        public bool AddOrderHeader(OrderHeader orderHeader)
+        {
+            unitOfWork.OrderHeaders.Add(orderHeader);
+            var result = unitOfWork.Complete();
+            if (result  >0)
+                return true;
+
+            else return false;
+        }
+
+        public bool AddOrdersDetails(List<OrderDetails> orderDetails)
+        {
+            unitOfWork.OrderDetails.AddRange(orderDetails);
+            var result = unitOfWork.Complete();
+            if (result > 0)
+                return true;
+
+            else return false;
+        }
         public int AddProductToCart(ProductForDetails productForDetails,string UserId)
         {
             var shoppingCart=unitOfWork.ShoppingCarts.Find(s=>s.ProductID==productForDetails.Id && s.UserID==UserId);
@@ -49,18 +90,36 @@ namespace MyShop.Web.Services.Implementations
         }
         public ShoppingCartVM GetAllShoppingCartsOfUser(string UserID)
         {
-            var shoppingCarts = unitOfWork.ShoppingCarts.FindAll(s => s.UserID == UserID, new string[] { "Product" });
+            var shoppingCarts = unitOfWork.ShoppingCarts.FindAll(s => s.UserID == UserID, new string[] { "Product"});
+            var user = unitOfWork.userRepository.Find(u => u.Id == UserID);
             decimal totalCarts = 0;
             foreach (var cart in shoppingCarts) { 
             totalCarts+= cart.Count*cart.Product.Price;
             }
 
-            return new ShoppingCartVM
+
+
+            var orderHeader = new OrderHeader
+            {
+                UserId = UserID,
+                //User=user,
+                TotalPrice=totalCarts,
+                UserName=user.FirstName??user.LastName,
+                Email=user.Email,
+                Address=user.Address,
+                PhoneNumber=user.PhoneNumber
+            };
+
+            var shoppinCartsVM= new ShoppingCartVM
             {
                 shoppingCarts = shoppingCarts
             ,
-                TotalCarts = totalCarts
+                TotalCarts = totalCarts,
+                OrderHeader=orderHeader
             };
+
+
+            return shoppinCartsVM;
         }
 
         public ShoppingCart GetShoppingCart(int cartID)
@@ -75,6 +134,22 @@ namespace MyShop.Web.Services.Implementations
             return unitOfWork.Complete();
 
 		}
+
+        public int saveChages()
+        {
+            return unitOfWork.Complete();
+        }
+
+
+        public void ChangeStatusOfOrderHeader(int id,string st1,string st2)
+        {
+            unitOfWork.OrderHeaders.ChangeStatus(id, st1, st2);
+            unitOfWork.Complete();
+        }
+        public OrderHeader GetOrderHeader(int id)
+        {
+            return unitOfWork.OrderHeaders.GetById(id);
+        }
 
         public int Plus(int cartID,int count)
         {
