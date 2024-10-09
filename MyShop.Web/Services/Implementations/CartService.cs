@@ -26,6 +26,12 @@ namespace MyShop.Web.Services.Implementations
            
         }
 
+        public bool UpdateOrderHeader(OrderHeader orderHeader)
+        {
+           unitOfWork.OrderHeaders.Update(orderHeader);
+            return unitOfWork.Complete() > 0;
+        }
+
         public bool RemoveShoppingCarts(IEnumerable<ShoppingCart> shoppingCarts)
         {
             unitOfWork.ShoppingCarts.DeleteRange(shoppingCarts);

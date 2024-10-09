@@ -88,12 +88,18 @@ namespace MyShop.Web.Areas.Customer.Controllers
             if (UserID == null) NotFound();
 			//shoppingCartVM = cartService.GetAllShoppingCartsOfUser(UserID);
 			shoppingCartVM.shoppingCarts = cartService.GetAllShoppingCarts(UserID);
+			decimal totalCarts = 0;
+            foreach (var cart in shoppingCartVM.shoppingCarts)
+            {
+                totalCarts += cart.Count * cart.Product.Price;
+            }
 
 
-			shoppingCartVM.OrderHeader.OrderStatus = SD.Pending;
+            shoppingCartVM.OrderHeader.OrderStatus = SD.Pending;
 			shoppingCartVM.OrderHeader.PaymentStatus = SD.Pending;
 			shoppingCartVM.OrderHeader.OrderDate = DateTime.Now;
 			shoppingCartVM.OrderHeader.UserId = UserID;
+			shoppingCartVM.OrderHeader.TotalPrice = totalCarts;
 
 			//// add order header
 
@@ -156,7 +162,7 @@ namespace MyShop.Web.Areas.Customer.Controllers
             Session session = service.Create(options);
 
 			shoppingCartVM.OrderHeader.SessionId = session.Id;
-			shoppingCartVM.OrderHeader.PaymentIntentId = session.PaymentIntentId;
+			//shoppingCartVM.OrderHeader.PaymentIntentId = session.PaymentIntentId;
 
 			cartService.saveChages();
 
@@ -181,6 +187,10 @@ namespace MyShop.Web.Areas.Customer.Controllers
 			if (session.PaymentStatus.ToLower() == "paid")
 			{
 				cartService.ChangeStatusOfOrderHeader(id, SD.Approved, SD.Approved);
+				orderHeader.PaymentIntentId = session.PaymentIntentId;
+				//cartService.UpdateOrderHeader(orderHeader);
+				cartService.saveChages();
+
 			}
 
 			//remove shoppng carts that already order it

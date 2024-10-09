@@ -27,6 +27,7 @@ namespace MyShop.DAL.Repositories
 			{
 				order.OrderStatus = orderStatus;
 				order.PaymentStatus = PaymentStatus;
+				order.PaymentDate= DateTime.Now;
 			}
 			appDbContext.SaveChanges();
 		}

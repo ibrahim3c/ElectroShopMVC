@@ -1,0 +1,25 @@
+﻿@{
+    Layout = "_Dashboard";
+    ViewBag.CardTitle = "Order List";
+    ViewBag.Title = "Orders Management";
+}
+
+
+
+<table id="order-table" class="table table-striped table-hover mt-4">
+    <thead class="table-dark">
+        <tr>
+            <th scope="col">Order Name</th>
+            <th scope="col">Order Status</th>
+            <th scope="col">Order Total</th>
+            <th scope="col">Phone Number</th>
+            <th scope="col">Email</th>
+            <th scope="col" class="text-center">Action</th> <!-- Center aligned action buttons -->
+        </tr>
+    </thead>
+</table>
+
+@section Scripts {
+    <script src="~/js/orders.js"></script>
+@*     <script src="~/js/deleteProduct.js"></script> *@
+}

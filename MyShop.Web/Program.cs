@@ -42,6 +42,7 @@ builder.Services.AddTransient<ICategoryService, CategoryService>();
 builder.Services.AddTransient<IProductService, MyShop.Web.Services.Implementations.ProductService>();
 builder.Services.AddTransient<IFileService, MyShop.Services.Implementations.FileService>();
 builder.Services.AddTransient<ICartService, CartService>();
+builder.Services.AddTransient<IOrderService, OrderService>();
 
 
 // Stripe

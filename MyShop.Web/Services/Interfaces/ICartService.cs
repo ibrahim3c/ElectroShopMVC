@@ -11,7 +11,9 @@ namespace MyShop.Web.Services.Interfaces
         public int Minus(int cartID, int count);
         public ShoppingCart GetShoppingCart(int cartID);
         public int RemoveShoppingCart(int cartID);
-        public IEnumerable<ShoppingCart> GetAllShoppingCarts(string userID);
+        public bool UpdateOrderHeader(OrderHeader orderHeader);
+
+		public IEnumerable<ShoppingCart> GetAllShoppingCarts(string userID);
         public bool AddOrderHeader(OrderHeader orderHeader);
         public bool AddOrdersDetails(List<OrderDetails> orderDetails);
         public bool RemoveShoppingCarts(IEnumerable<ShoppingCart> shoppingCarts);
