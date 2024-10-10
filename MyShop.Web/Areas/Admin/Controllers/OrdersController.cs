@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
+using MyShop.Entities.Models;
 using MyShop.Web.Constants;
 using MyShop.Web.Services.Interfaces;
 using MyShop.Web.Settings;
 using MyShop.Web.ViewModels;
+using Stripe;
 
 namespace MyShop.Web.Areas.Admin.Controllers
 {
@@ -41,6 +43,8 @@ namespace MyShop.Web.Areas.Admin.Controllers
             return View(orderDetails);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
 		public IActionResult UpdateOrderDetails(OrderDetailsVM orderDetails)
         {
             if(ModelState.IsValid) 
@@ -67,9 +71,90 @@ namespace MyShop.Web.Areas.Admin.Controllers
 
             //cartService.UpdateOrderHeader(orderHeader);
             cartService.saveChages();
-			TempData[ToastrKeys.Update] = "item has updated successfully";
+			TempData[ToastrKeys.Update] = "The Item has updated successfully";
 			return RedirectToAction(nameof(Details), new { id = orderDetails.OrderHeader.Id });
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+       public IActionResult StartProccess(OrderHeader orderHeader)
+        {
+            var id = orderHeader.Id;
+            if (orderHeader == null)
+                return NotFound();
+
+            cartService.ChangeStatusOfOrderHeader(id, SD.Proccessing, null);
+
+			TempData[ToastrKeys.Update] = "the Order Status has updated successfully";
+			return RedirectToAction(nameof(Details), new { id =id });
+		}
+
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public IActionResult StartShip(OrderHeader orderHeader)
+		{
+			var id = orderHeader.Id;
+            var order=cartService.GetOrderHeader(id);
+			if (orderHeader == null)
+				return NotFound();
+
+            order.TrackingNumber=orderHeader.TrackingNumber;
+            order.Carrier=orderHeader.Carrier;
+            order.OrderStatus = SD.Shipped;
+            order.ShippingDate=DateTime.Now;
+
+            cartService.saveChages();
+
+
+			TempData[ToastrKeys.Update] = "The Order  has been Shipped successfully";
+			return RedirectToAction(nameof(Details), new { id = id });
+		}
+
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public IActionResult CancelOrder(OrderHeader orderHeader)
+		{
+			var id = orderHeader.Id;
+			var order = cartService.GetOrderHeader(id);
+			if (orderHeader == null)
+				return NotFound();
+
+            // my code 
+            if (order.OrderStatus == SD.Cancelled)
+            {
+				TempData[ToastrKeys.Update] = "The order is already cancelled.";
+				return RedirectToAction(nameof(Details), new { id = id });
+			}
+                 
+
+
+            if (order.PaymentStatus == SD.Approved)
+            {
+                var options = new RefundCreateOptions()
+                {
+                    Reason = RefundReasons.RequestedByCustomer,
+                    PaymentIntent = orderHeader.PaymentIntentId
+                };
+                var service =new  RefundService();
+                Refund refund=service.Create(options);
+				cartService.ChangeStatusOfOrderHeader(id, SD.Cancelled, SD.Refund);
+
+
+			}
+            else
+            {
+				cartService.ChangeStatusOfOrderHeader(id, SD.Cancelled, SD.Cancelled);
+
+			}
+
+			cartService.saveChages();
+
+
+			TempData[ToastrKeys.Update] = "the Order has been Cancelled successfully";
+			return RedirectToAction(nameof(Details), new { id = id });
+		}
 	}
 
 }

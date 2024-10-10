@@ -19,15 +19,20 @@ namespace MyShop.DAL.Repositories
 			this.appDbContext = appDbContext;
 		}
 
-		public void ChangeStatus(int orderID, string orderStatus, string PaymentStatus)
+		public void ChangeStatus(int orderID, string orderStatus, string? PaymentStatus)
 		{
 			var order=appDbContext.orderHeaders.Find(orderID);
 
 			if (order != null)
 			{
 				order.OrderStatus = orderStatus;
-				order.PaymentStatus = PaymentStatus;
-				order.PaymentDate= DateTime.Now;
+
+				if(PaymentStatus is not null)
+				{
+					order.PaymentStatus = PaymentStatus;
+					order.PaymentDate = DateTime.Now;
+				}
+				
 			}
 			appDbContext.SaveChanges();
 		}

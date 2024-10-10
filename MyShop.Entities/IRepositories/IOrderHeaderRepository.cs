@@ -9,6 +9,6 @@ namespace MyShop.Entities.IRepositories
 {
 	public interface IOrderHeaderRepository:IBaseRepository<OrderHeader>
 	{
-		public void ChangeStatus(int orderID, string orderStatus,string PaymentStatus);
+		public void ChangeStatus(int orderID, string orderStatus, string? PaymentStatus);
 	}
 }

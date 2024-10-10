@@ -130,7 +130,6 @@
 									<li class="list-group-item d-flex justify-content-between p-2">
 										<div class="row container">
 											<div class="col-8">
-
 												<h6 class="my-0 text-primary">@item.Product.Name</h6>
 												<small class="text-muted">Price : @item.Product.Price</small><br />
 											<small class="text-muted">Quantity : @item.Quantity</small>
@@ -143,29 +142,37 @@
 							}
 
 
-							<li class="list-group-item bg-dark">
-								<div class="row container">
-									<div class="col-6">
+							<li class="list-group-item bg-dark ">
+								<div class="row container d-flex justify-content-around  align-content-center">
+									<div>
 										<h5 class="text-white">TOTAL </h5>
 									</div>
-									<div class="col-6 text-end">
+									<div >
 										<h5 class="text-white">@(Model.OrderHeader.TotalPrice.ToString("c"))</h5>
 									</div>
 								</div>
 							</li>
 						</ul>
-						@if (Model.OrderHeader.OrderStatus == SD.Approved)
-						{
+
+
+						<div class="d-flex justify-content-between">
+							@if (Model.OrderHeader.OrderStatus == SD.Approved)
+							{
 								<input type="submit" asp-action="StartProccess" class="btn btn-primary" value="Start Proccess" />
-						}
-						@if (Model.OrderHeader.OrderStatus == SD.Proccessing)
-						{
+							}
+							@if (Model.OrderHeader.OrderStatus == SD.Proccessing)
+							{
 								<input type="submit" asp-action="StartShip" onclick="return CheckData()" class="btn btn-success" value="Start Shipping" />
-						}
-						@if (Model.OrderHeader.OrderStatus != SD.Cancelled || Model.OrderHeader.OrderStatus != SD.Refund)
-						{
+							}
+							@if (Model.OrderHeader.OrderStatus != SD.Cancelled || Model.OrderHeader.OrderStatus != SD.Refund)
+							{
 								<input type="submit" class="btn btn-danger" asp-action="CancelOrder" value="Cancel Order" />
-						}
+							}
+
+						</div>
+
+
+						
 					</div>
 				</div>
 			</div>

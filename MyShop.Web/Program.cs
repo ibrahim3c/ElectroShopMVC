@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using MyShop.Entities.Models;
 using MyShop.Web.Constants;
 using Stripe;
+using MyShop.Web.Areas.Admin.Views.Orders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,11 +39,8 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(options => {
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 
 // dependency injection
-builder.Services.AddTransient<ICategoryService, CategoryService>();
-builder.Services.AddTransient<IProductService, MyShop.Web.Services.Implementations.ProductService>();
-builder.Services.AddTransient<IFileService, MyShop.Services.Implementations.FileService>();
-builder.Services.AddTransient<ICartService, CartService>();
-builder.Services.AddTransient<IOrderService, OrderService>();
+builder.Services.AddServiceDependencyInjection();
+
 
 
 // Stripe
