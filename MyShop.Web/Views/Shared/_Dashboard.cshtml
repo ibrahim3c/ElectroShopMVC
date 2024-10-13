@@ -24,6 +24,9 @@
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
     <!-- DataTables-->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css">
+    <!-- TinyMCE-->
+    @* <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script> *@
+    <script src="https://cdn.tiny.cloud/1/d910j200czid6t6u33wp10o74xkpnx4uzjiu24fwskua6rls/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
 </head>
 <body class="hold-transition sidebar-mini">
 <!-- Site wrapper -->
@@ -191,7 +194,7 @@
           </li>
 
                         <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
+                            <a href="/Admin/Categories" class="nav-link">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
                                     Categories
@@ -199,7 +202,7 @@
                             </a>
                         </li>
                         <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
+                            <a href="/Admin/Products" class="nav-link">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
                                     Products
@@ -209,7 +212,7 @@
 
 
                         <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
+                            <a href="/Admin/Users" class="nav-link">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
                                     Users
@@ -218,7 +221,7 @@
                         </li>
 
                         <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
+                            <a href="/Admin/Orders" class="nav-link">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
                                     Orders
@@ -307,6 +310,15 @@
     <!-- DataTables-->
     <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
+
+   @* TinyMCE *@
+    <script>
+        tinymce.init({
+            selector: '#mytextarea'
+        });
+    </script>
+
+ 
 </body>
 
 </html>

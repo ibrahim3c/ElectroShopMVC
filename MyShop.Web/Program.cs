@@ -2,15 +2,11 @@ using Microsoft.EntityFrameworkCore;
 using MyShop.DAL.Data;
 using MyShop.DAL.Repositories;
 using MyShop.Entities.IRepositories;
-using MyShop.Services.Implementations;
-using MyShop.Services.Interfaces;
-using MyShop.Web.Services.Implementations;
-using MyShop.Web.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using MyShop.Entities.Models;
 using MyShop.Web.Constants;
 using Stripe;
-using MyShop.Web.Areas.Admin.Views.Orders;
+using MyShop.Web.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
