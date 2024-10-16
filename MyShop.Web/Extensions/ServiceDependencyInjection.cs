@@ -15,6 +15,7 @@ namespace MyShop.Web.Extensions
             services.AddTransient<IFileService, MyShop.Services.Implementations.FileService>();
             services.AddTransient<ICartService, CartService>();
             services.AddTransient<IOrderService, OrderService>();
+            services.AddTransient<IDashboardService, DashboardService>();
             return services;
 
         }

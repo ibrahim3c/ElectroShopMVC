@@ -5,11 +5,13 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using MyShop.Entities.Models;
+using MyShop.Web.Constants;
 
 namespace MyShop.Web.Areas.Identity.Pages.Account
 {
@@ -17,17 +19,21 @@ namespace MyShop.Web.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<AppUser> _signInManager;
         private readonly ILogger<LogoutModel> _logger;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
-        public LogoutModel(SignInManager<AppUser> signInManager, ILogger<LogoutModel> logger)
+        public LogoutModel(SignInManager<AppUser> signInManager, ILogger<LogoutModel> logger,
+            IHttpContextAccessor httpContextAccessor)
         {
             _signInManager = signInManager;
             _logger = logger;
+            this.httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<IActionResult> OnPost(string returnUrl = null)
         {
             await _signInManager.SignOutAsync();
             _logger.LogInformation("User logged out.");
+            httpContextAccessor.HttpContext.Session.Remove(SD.SessionKey);
             if (returnUrl != null)
             {
                 return LocalRedirect(returnUrl);

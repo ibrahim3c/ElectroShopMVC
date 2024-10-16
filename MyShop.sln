@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35122.118
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyShop.DAL", "MyShop.DAL\MyShop.DAL.csproj", "{F57D7A88-388A-4956-8CD5-8B6570F7764B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyShop.DAL", "MyShop.DAL\MyShop.DAL.csproj", "{F57D7A88-388A-4956-8CD5-8B6570F7764B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyShop.Entities", "MyShop.Entities\MyShop.Entities.csproj", "{F58B4C11-F77E-4D34-85A4-8704566032CE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyShop.Entities", "MyShop.Entities\MyShop.Entities.csproj", "{F58B4C11-F77E-4D34-85A4-8704566032CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyShop.Web", "MyShop.Web\MyShop.Web.csproj", "{78FCA14D-2299-4D85-8F6F-52F7AA5C52DB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyShop.Web", "MyShop.Web\MyShop.Web.csproj", "{78FCA14D-2299-4D85-8F6F-52F7AA5C52DB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,0 +1,19 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims
+
+@inject UserManager<AppUser> userManager
+@{
+    var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+    var appUser = userManager.Users.FirstOrDefault(u => u.Id == userId);
+    var fullName = appUser.FirstName ?? "" + " " + @appUser.LastName ?? "";
+    var ProfilePicture = appUser.ProfilePicture??"~/img/avatar5.png";
+}
+<div class="user-panel pb-3 d-flex align-items-center py-3">
+    <div class="image me-2">
+        <img src="@ProfilePicture" class="img-circle elevation-2" alt="User Image" style="width: 40px; height: 40px;">
+    </div>
+    <div class="info">
+        <p class="mb-0" style="color: white; font-size: 15px;">@fullName</p>
+    </div>
+</div>
+

@@ -138,7 +138,8 @@ namespace MyShop.Web.Services.Implementations
                 Id = p.Id,
                 Name = p.Name,
                 ImgSrc = p.ImgSrc,
-                Price = p.Price
+                Price = p.Price,
+                Description=p.Description
             }).ToList();
         }
         public ProductForDetails GetProductDetails(int id)

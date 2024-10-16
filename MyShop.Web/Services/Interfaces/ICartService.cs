@@ -20,6 +20,8 @@ namespace MyShop.Web.Services.Interfaces
         public OrderHeader GetOrderHeader(int id);
         public void ChangeStatusOfOrderHeader(int id, string st1, string st2);
         public bool RemoveShoppingCartsOfOrderHeader(int orderHeaderID);
+        public int RemoveShoppingCartAndReturnCount(int cartID);
+        public int GetCountOfShoppinCartsOfUser(string UserID);
         public int saveChages();
 
 

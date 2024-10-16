@@ -41,6 +41,10 @@ builder.Services.AddServiceDependencyInjection();
 
 // Stripe
 builder.Services.Configure<StripeData>(builder.Configuration.GetSection("Stripe"));
+
+// session cards
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession();
 #endregion
 
 
@@ -61,7 +65,9 @@ app.UseStaticFiles();
 app.UseRouting();  // First, define the routing
 
 StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey").Get<string>();
+app.UseAuthentication();
 app.UseAuthorization();  // Authorization goes after routing
+app.UseSession();
 app.MapRazorPages(); // to use Razor Pages
 
 //app.MapControllerRoute(

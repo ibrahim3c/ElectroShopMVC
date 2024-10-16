@@ -8,9 +8,9 @@
 <section class="py-5">
    <div class="container px-4 px-lg-5 mt-5">
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-5">
         <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <h2>Create a new account.</h2>
+            <h2 class="text-center">Create a new account</h2>
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
              <div class="form-floating mb-3">
@@ -59,9 +59,17 @@
             }
         </form>
     </div>
-    <div class="col-md-6 col-md-offset-2">
-        <section>
-            <h3>Use another service to register.</h3>
+    <div class="col-md-6">
+        <section >
+
+                    <div>
+
+                        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/draw1.webp"
+                             class="img-fluid" alt="Sample image"
+                             style="height:600px;max-width:100%">
+
+                    </div>
+          @*   <h3>Use another service to register.</h3>
             <hr />
             @{
                 if ((Model.ExternalLogins?.Count ?? 0) == 0)
@@ -86,7 +94,7 @@
                         </div>
                     </form>
                 }
-            }
+            } *@
         </section>
     </div>
 </div>

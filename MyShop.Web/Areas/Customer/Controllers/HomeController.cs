@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using MyShop.Web.Constants;
 using MyShop.Web.Services.Implementations;
 using MyShop.Web.Services.Interfaces;
 using MyShop.Web.ViewModels;
 using System.Security.Claims;
+using X.PagedList;
 
 namespace MyShop.Web.Areas.Customer.Controllers
 {
@@ -19,9 +21,12 @@ namespace MyShop.Web.Areas.Customer.Controllers
             this.cartService = cartService;
             this.productService = productService;
         }
-        public IActionResult Index()
+        public IActionResult Index(int ?page)
         {
-            var productsForIndex=productService.GetAllProductForIndex();
+
+            int pageNumber = page ?? 1; // if no page was specified in the querystring, default to the first page (1)
+            int pageSize = 8;
+            var productsForIndex=productService.GetAllProductForIndex().ToPagedList(pageNumber, pageSize);          
             return View(productsForIndex);
         }
 
@@ -49,9 +54,18 @@ namespace MyShop.Web.Areas.Customer.Controllers
             var UserId = claimIdentity.Value;
 
             var result=cartService.AddProductToCart(productForDetails, UserId);
+
             if (result > 0)
             {
-            return RedirectToAction(nameof(Index));
+                //// add session card
+                //var count=cartService.GetAllShoppingCarts(UserId).Count();
+                //HttpContext.Session.SetInt32(SD.SessionKey, count);
+
+                // add session card
+                var count = (HttpContext.Session.GetInt32(SD.SessionKey) ?? 0)+ productForDetails.Count ;
+                HttpContext.Session.SetInt32(SD.SessionKey, count);
+
+                return RedirectToAction(nameof(Index));
 
             }
 

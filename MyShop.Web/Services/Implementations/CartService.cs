@@ -2,6 +2,7 @@
 using MyShop.Entities.IRepositories;
 using MyShop.Entities.Models;
 using MyShop.Services.Interfaces;
+using MyShop.Web.Constants;
 using MyShop.Web.Services.Interfaces;
 using MyShop.Web.ViewModels;
 using System.Security.Claims;
@@ -132,11 +133,25 @@ namespace MyShop.Web.Services.Implementations
         {
             return unitOfWork.ShoppingCarts.GetById(cartID);
         }
-		public int RemoveShoppingCart(int cartID)
+        public int RemoveShoppingCartAndReturnCount(int cartID)
+        {
+            var cart = unitOfWork.ShoppingCarts.GetById(cartID);
+            if (cart == null) return 0;
+            var count = cart.Count;
+            unitOfWork.ShoppingCarts.Delete(cart);
+
+          
+             unitOfWork.Complete();
+            return count;
+
+        }
+        public int RemoveShoppingCart(int cartID)
 		{
 			var cart= unitOfWork.ShoppingCarts.GetById(cartID);
             if (cart == null) return 0;
             unitOfWork.ShoppingCarts.Delete(cart);
+
+      
             return unitOfWork.Complete();
 
 		}
@@ -178,5 +193,18 @@ namespace MyShop.Web.Services.Implementations
 			shoppingCart.Count=unitOfWork.ShoppingCarts.DecreaseCount(shoppingCart, count);
 			return unitOfWork.Complete();
 		}
-	}
+
+        public int GetCountOfShoppinCartsOfUser(string UserID)
+        {
+            var shoppingCarts = unitOfWork.ShoppingCarts.FindAll(s => s.UserID == UserID, new string[] { "Product" });
+            var user = unitOfWork.userRepository.Find(u => u.Id == UserID);
+            int totalCarts = 0;
+            foreach (var cart in shoppingCarts)
+            {
+                totalCarts += cart.Count;
+            }
+            return totalCarts;
+
+        }
+    }
 }

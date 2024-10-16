@@ -37,7 +37,14 @@ namespace MyShop.Web.Areas.Customer.Controllers
 		{
 			var result = cartService.Plus(Id, 1);
 			if (result > 0)
-				return RedirectToAction(nameof(Index));
+			{
+
+                // add session card
+                var count = (HttpContext.Session.GetInt32(SD.SessionKey)??0)+1;
+                HttpContext.Session.SetInt32(SD.SessionKey,count);
+
+                return RedirectToAction(nameof(Index));
+			}
 			return BadRequest();
 		}
 
@@ -47,7 +54,12 @@ namespace MyShop.Web.Areas.Customer.Controllers
 			var result = cartService.Minus(Id, 1);
 
 			if (result > 0)
+			{
+				//add session card
+			   var count = (HttpContext.Session.GetInt32(SD.SessionKey) ?? 0) - 1;
+				HttpContext.Session.SetInt32(SD.SessionKey, count);
 				return RedirectToAction(nameof(Index));
+			}
 
 			if (result == 1000)
 				return RedirectToAction("Index", "Home");
@@ -57,16 +69,25 @@ namespace MyShop.Web.Areas.Customer.Controllers
 			//return RedirectToAction(nameof(Index));
 		}
 
-		public IActionResult Remove(int CartID)
+		public IActionResult RemoveOriginal(int CartID)
 		{
-			var result=cartService.RemoveShoppingCart(CartID);
+			var result=cartService.RemoveShoppingCartAndReturnCount(CartID);
 			if (result > 0)
 				return RedirectToAction(nameof(Index));
 
 			return BadRequest();
 		}
 
-		[HttpGet]
+        public IActionResult Remove(int CartID)
+        {
+            var CartCount = cartService.RemoveShoppingCartAndReturnCount(CartID);
+            var count = (HttpContext.Session.GetInt32(SD.SessionKey) ?? 0) - CartCount;
+            HttpContext.Session.SetInt32(SD.SessionKey, count);
+
+            return RedirectToAction(nameof(Index));
+
+        }
+        [HttpGet]
 		public IActionResult Summary()
 		{
 
@@ -197,6 +218,10 @@ namespace MyShop.Web.Areas.Customer.Controllers
 			//remove shoppng carts that already order it
 
 			cartService.RemoveShoppingCartsOfOrderHeader(orderHeader.Id);
+
+			// remove session 
+			HttpContext.Session.Remove(SD.SessionKey);
+
             return View(id);
 
 

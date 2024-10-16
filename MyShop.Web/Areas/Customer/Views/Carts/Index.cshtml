@@ -3,83 +3,135 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Shopping Cart</title>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" ">
-	<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
-	<link rel="stylesheet" href="~/cart/assets/css/style.css">
+    <title>Shopping Cart</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" ">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+    <!-- Font Awesome CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="~/cart/assets/css/style.css">
 </head>
+
+
 <body>
-	<main class="page">
-		<section class="shopping-cart dark">
-			<div class="container">
-				<div class="block-heading">
-					<h2>Shopping Cart</h2>
-				</div>
-				<div class="content">
-					<div class="row">
-						<div class="col-md-12 col-lg-8">
-							<div class="items">
-								@foreach(var cart in Model.shoppingCarts)
-								{
-									<div class="product">
-										<div class="row">
-											<div class="col-md-3">
-												<img class="img-fluid mx-auto d-block image" src="@cart.Product.ImgSrc">
-											</div>
-											<div class="col-md-8">
-												<div class="info">
-													<div class="row">
-														<div class="col-md-5 product-name">
-															<div class="product-name">
-																<a href="#">@cart.Product.Name</a>
-																<div class="product-info">
-																	<div>Descritption: <span class="value">@cart.Product.Description</span></div>
-																	
-																</div>
-															</div>
-														</div>
-														<div class="col-md-4 quantity">
-															<label for="quantity">Quantity:</label>
-															<div class="btn-group" role="group">
-																<a class="btn btn-primary" href="/Customer/Carts/Plus/@cart.Id" >+</a>
-																<span style="margin:5px">@cart.Count</span>
-																<a class="btn btn-primary" href="/Customer/Carts/Minus/@cart.Id">-</a>
-															</div>
-														</div>
-														<div class="col-md-3 price">
-															<span>$@cart.Product.Price</span>
-														</div>
+    <main class="page">
+        <section class="h-100 h-custom">
+            <div class="container py-5 h-100">
+                <div class="row d-flex justify-content-center align-items-center h-100">
+                    <div class="col-12">
+                        <div class="card card-registration card-registration-2" style="border-radius: 15px;">
+                            <div class="card-body p-0">
+                                <div class="row g-0">
+                                    <div class="col-lg-8">
+                                        <div class="p-5">
+                                            <div class="d-flex justify-content-between align-items-center mb-5">
+                                                <h1 class="fw-bold mb-0">Shopping Cart</h1>
+                                                <h6 class="mb-0 text-muted">@Model.shoppingCarts.Count() items</h6>
+                                            </div>
+                                            <hr class="my-4">
 
-														<div class="col-md-3 price">
-															<a asp-action="Remove" asp-route-cartID="@cart.Id" class="btn btn-danger">Remove</a>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
+                                            @foreach (var cart in Model.shoppingCarts)
+                                            {
+                                                <div class="row mb-4 d-flex justify-content-between align-items-center">
+                                                    <div class="col-md-2 col-lg-2 col-xl-2">
+                                                        <img src=@cart.Product.ImgSrc
+                                                             class="img-fluid rounded-3" alt="Cotton T-shirt">
+                                                    </div>
+                                                    <div class="col-md-3 col-lg-3 col-xl-3">
+                                                        <h6 class="text-muted">@cart.Product.Name</h6>
+                                                        <h6 class="mb-0">@cart.Product.Description</h6>
+                                                    </div>
 
-								}
-							</div>
-						</div>
-						<div class="col-md-12 col-lg-4">
-							<div class="summary">
-								<h3>Summary</h3>
-							@* 	<div class="summary-item"><span class="text">Subtotal</span><span class="price">$360</span></div>
-								<div class="summary-item"><span class="text">Discount</span><span class="price">$0</span></div>
-								<div class="summary-item"><span class="text">Shipping</span><span class="price">$0</span></div> *@
-								<div class="summary-item"><span class="text">Total</span><span class="price">@Model.TotalCarts.ToString()</span></div>
-								<a asp-action="Summary" class="btn btn-primary btn-lg btn-block">Checkout</a>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
-	</main>
+                                                    <div class="col-md-3 col-lg-3 col-xl-2 d-flex align-items-center justify-content-center">
+                                                        <a href="/Customer/Carts/Minus/@cart.Id" data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-primary"
+                                                           onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
+                                                            <i class="fas fa-minus"></i>
+                                                        </a>
+
+                                                       @*  <input id="form1" min="0" name="quantity" value="1" type="number"
+                                                               class="form-control form-control-sm mx-2 text-center" style="width: 50px;" /> *@
+
+                                                        <span class="form-control form-control-sm mx-2 text-center" style="width: 50px; padding:10px 20px;">@cart.Count</span>
+
+
+                                                        <a href="/Customer/Carts/Plus/@cart.Id" data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-primary"
+                                                           onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
+                                                            <i class="fas fa-plus"></i>
+                                                        </a>
+                                                    </div>
+
+                                                    <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                                                        <h6 class="mb-0">€ @cart.Product.Price</h6>
+                                                    </div>
+                                                    <div class="col-md-1 col-lg-1 col-xl-1 text-end">
+                                                        <a asp-action="Remove" asp-route-cartID="@cart.Id" class="text-muted"><i class="fas fa-times"></i></a>
+                                                    </div>
+                                                </div>
+
+                                            }
+
+                                            <hr class="my-4">
+
+
+                                            <div class="pt-5">
+                                                <h6 class="mb-0">
+                                                    <a href="/customer/Home" class="text-body text-decoration-none">
+                                                        <i class="fas fa-long-arrow-alt-left me-2"></i>
+                                                        Back to shop
+                                                    </a>
+                                                </h6>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 bg-body-tertiary">
+                                        <div class="p-5">
+                                            <h3 class="fw-bold mb-5 mt-2 pt-1">Summary</h3>
+                                            <hr class="my-4">
+
+
+                                            <h5 class="text-uppercase mb-3">Promo Code</h5>
+
+                                            <div class="mb-5">
+                                                <div data-mdb-input-init class="form-outline">
+                                                    <input type="text" id="form3Examplea2" class="form-control form-control-lg" />
+                                                    <label class="form-label" for="form3Examplea2">Enter your code</label>
+                                                </div>
+                                            </div>
+
+                                            <hr class="my-4">
+
+                                            <div class="d-flex justify-content-between mb-5">
+                                                <h5 class="text-uppercase">Total price</h5>
+                                                <h5>€ @Model.TotalCarts.ToString()</h5>
+                                            </div>
+
+                                            <div class="d-grid">
+
+                                                <a asp-action="Summary" type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-dark btn-block btn-lg"
+                                                        data-mdb-ripple-color="dark">
+                                                    Register
+                                                </a>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <!-- fontawesome -->
+    <script src="https://kit.fontawesome.com/0c0a9d7e4a.js" crossorigin="anonymous"></script>
 </body>
-<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
 </html>
