@@ -1,4 +1,5 @@
-﻿using MyShop.Services.Interfaces;
+﻿using MyShop.DAL.DBInializer;
+using MyShop.Services.Interfaces;
 using MyShop.Web.Services.Implementations;
 using MyShop.Web.Services.Interfaces;
 
@@ -16,6 +17,7 @@ namespace MyShop.Web.Extensions
             services.AddTransient<ICartService, CartService>();
             services.AddTransient<IOrderService, OrderService>();
             services.AddTransient<IDashboardService, DashboardService>();
+            services.AddScoped<IDbInitializer, DbInitializer>();
             return services;
 
         }

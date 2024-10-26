@@ -7,6 +7,7 @@ using MyShop.Entities.Models;
 using MyShop.Web.Constants;
 using Stripe;
 using MyShop.Web.Extensions;
+using MyShop.DAL.DBInializer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -65,6 +66,10 @@ app.UseStaticFiles();
 app.UseRouting();  // First, define the routing
 
 StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey").Get<string>();
+
+
+SeedDb();
+
 app.UseAuthentication();
 app.UseAuthorization();  // Authorization goes after routing
 app.UseSession();
@@ -83,3 +88,15 @@ app.MapControllerRoute(
     name: "areas",
     pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
 app.Run();
+
+ void SeedDb()
+{
+    using var scope = app.Services.CreateScope();
+    {
+        var initializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
+        initializer.Initialize();
+        
+
+    }
+
+}
