@@ -31,5 +31,3 @@ Developed a feature-rich Electronics E-Commerce website focusing on performance,
 - **Payment Gateway**: Stripe  
 - **Cloud Platform**: Microsoft Azure  
 
----
-
