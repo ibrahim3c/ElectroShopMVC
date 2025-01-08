@@ -1,4 +1,4 @@
-# Complete Web Application Project Using ASP.NET Core
+# ElectroShop
 
 ## Project Overview
 Developed a feature-rich Electronics E-Commerce website focusing on performance, user experience, and maintainability.
@@ -23,9 +23,9 @@ Developed a feature-rich Electronics E-Commerce website focusing on performance,
 ---
 
 ## Technologies Used
-- **Framework**: ASP.NET Core  
-- **Database**: Entity Framework Core  
-- **Frontend**: HTML, CSS, JavaScript, JQuery  
+- **Backend**: ASP.NET Core MVC, EFCore, C#, Linq  
+- **Database**: MS SQL Server  
+- **Frontend**: HTML, CSS, JavaScript, JQuery, Bootstrap  
 - **Theme**: Custom Theme Integration  
 - **Authentication**: Microsoft Identity  
 - **Payment Gateway**: Stripe  
